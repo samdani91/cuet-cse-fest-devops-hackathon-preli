@@ -5,7 +5,7 @@ services:
     container_name: dev-mongo
     restart: unless-stopped
     env_file:
-      - ../.env
+      - .env
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
@@ -25,19 +25,19 @@ services:
   # Backend Service
   backend:
     build:
-      context: ../backend
+      context: ./backend
       dockerfile: Dockerfile.dev
     container_name: dev-backend
     restart: unless-stopped
     env_file:
-      - ../.env
+      - .env
     environment:
       NODE_ENV: ${NODE_ENV:-development}
       BACKEND_PORT: ${BACKEND_PORT}
       MONGO_URI: ${MONGO_URI}
       MONGO_DATABASE: ${MONGO_DATABASE}
     volumes:
-      - ../backend/src:/app/src:ro
+      - ./backend/src:/app/src:ro
       - backend_node_modules_dev:/app/node_modules
     networks:
       - backend-network
@@ -54,12 +54,12 @@ services:
   # Gateway Service
   gateway:
     build:
-      context: ../gateway
+      context: ./gateway
       dockerfile: Dockerfile.dev
     container_name: dev-gateway
     restart: unless-stopped
     env_file:
-      - ../.env
+      - .env
     environment:
       NODE_ENV: ${NODE_ENV:-development}
       GATEWAY_PORT: ${GATEWAY_PORT}
@@ -67,7 +67,7 @@ services:
     ports:
       - "${GATEWAY_PORT}:${GATEWAY_PORT}"
     volumes:
-      - ../gateway/src:/app/src:ro
+      - ./gateway/src:/app/src:ro
       - gateway_node_modules_dev:/app/node_modules
     networks:
       - backend-network

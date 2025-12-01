@@ -1,0 +1,25 @@
+# Development Dockerfile for Gateway with hot-reload
+FROM node:20-alpine
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
+
+# Copy source code
+COPY src ./src
+
+# Expose port
+EXPOSE 5921
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start in development mode with hot-reload
+CMD ["npm", "run", "dev"]
