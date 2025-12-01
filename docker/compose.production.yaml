@@ -4,6 +4,7 @@ services:
     image: mongo:7.0-jammy
     container_name: prod-mongo
     restart: always
+    command: ["mongod", "--quiet"]
     env_file:
       - ../.env
     environment:
